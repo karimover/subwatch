@@ -1,0 +1,6 @@
+{% extends 'base.html' %}
+{% block title %}Добавить платёж — SubWatch{% endblock %}
+{% block content %}
+<div class="page-heading"><a class="back-link" href="{% url 'subscription_detail' subscription.pk %}">← К подписке {{ subscription.name }}</a><div class="section-kicker">ИСТОРИЯ ОПЛАТ</div><h1>Добавить платёж</h1><p>Запиши фактическое списание по подписке.</p></div>
+<div class="form-card settings-card"><form method="post" novalidate>{% csrf_token %}{% for field in form %}<div class="field-block"><label for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}{% for error in field.errors %}<div class="field-error">{{ error }}</div>{% endfor %}</div>{% endfor %}<div class="form-actions"><a class="btn btn-ghost" href="{% url 'subscription_detail' subscription.pk %}">Отмена</a><button class="btn btn-primary" type="submit">Сохранить платёж</button></div></form></div>
+{% endblock %}

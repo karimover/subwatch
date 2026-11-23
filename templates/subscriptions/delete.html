@@ -1,0 +1,5 @@
+{% extends 'base.html' %}
+{% block title %}Удаление подписки — SubWatch{% endblock %}
+{% block content %}
+<div class="form-card confirm-card"><div class="danger-icon">!</div><div class="section-kicker">ПОДТВЕРЖДЕНИЕ</div><h1>Удалить подписку?</h1><p>Подписка «{{ subscription.name }}», её платежи, напоминания и история стоимости будут удалены. Это действие нельзя отменить.</p><form method="post">{% csrf_token %}<div class="form-actions justify-content-center"><a href="{% url 'subscription_detail' subscription.pk %}" class="btn btn-ghost">Оставить</a><button class="btn btn-danger" type="submit">Удалить подписку</button></div></form></div>
+{% endblock %}

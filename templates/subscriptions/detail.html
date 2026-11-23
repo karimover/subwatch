@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block title %}{{ subscription.name }} — SubWatch{% endblock %}
+{% block content %}
+<div class="detail-topline"><a class="back-link" href="{% url 'subscription_list' %}">← Все подписки</a><div class="detail-actions">{% if subscription.status != 'cancelled' %}<button type="button" class="btn btn-secondary btn-sm" data-subscription-toggle data-api-url="{% url 'api-subscription-detail' subscription.pk %}" data-next-status="{% if subscription.status == 'active' %}paused{% else %}active{% endif %}">{% if subscription.status == 'active' %}Приостановить{% else %}Возобновить{% endif %}</button>{% endif %}<a class="btn btn-secondary btn-sm" href="{% url 'subscription_edit' subscription.pk %}">Изменить</a><a class="btn btn-outline-danger btn-sm" href="{% url 'subscription_delete' subscription.pk %}">Удалить</a></div></div>
+<div class="detail-hero panel">
+    <div class="detail-service-mark" style="--category-color: {{ subscription.category.color }}">{{ subscription.name|first|upper }}</div>
+    <div class="detail-title-block"><div class="detail-meta"><span class="category-tag"><i style="--category-color: {{ subscription.category.color }}"></i>{{ subscription.category.name }}</span><span class="status-pill status-{{ subscription.status }}" data-subscription-status>{{ subscription.get_status_display }}</span></div><h1>{{ subscription.name }}</h1><p>{{ subscription.provider|default:'Платная подписка' }}{% if subscription.website %} · <a href="{{ subscription.website }}" target="_blank" rel="noopener">Открыть сайт ↗</a>{% endif %}</p></div>
+    <div class="detail-price"><strong>{{ subscription.amount|floatformat:2 }} <small>{{ subscription.currency }}</small></strong><span>{{ subscription.get_billing_cycle_display|lower }}</span></div>
+</div>
+<p class="inline-feedback" data-subscription-feedback role="status" aria-live="polite"></p>
+<div class="detail-metrics-grid">
+    <div class="mini-metric"><span>Следующее списание</span><strong>{{ subscription.next_payment_date|date:'d.m.Y' }}</strong><small>{% if subscription.days_until_payment < 0 %}Просрочено на {{ subscription.days_until_payment|stringformat:'d'|slice:'1:' }} дн.{% elif subscription.days_until_payment == 0 %}Сегодня{% elif subscription.days_until_payment == 1 %}Завтра{% else %}Через {{ subscription.days_until_payment }} дн.{% endif %}</small></div>
+    <div class="mini-metric"><span>В месяц</span><strong>{{ subscription.monthly_amount|floatformat:2 }} {{ subscription.currency }}</strong><small>нормализованный эквивалент</small></div>
+    <div class="mini-metric"><span>За год</span><strong>{{ subscription.annual_amount|floatformat:2 }} {{ subscription.currency }}</strong><small>при текущей стоимости</small></div>
+    <div class="mini-metric"><span>Автопродление</span><strong>{% if subscription.auto_renew %}Включено{% else %}Отключено{% endif %}</strong><small>{{ subscription.get_status_display }}</small></div>
+</div>
+<div class="content-grid detail-content-grid">
+    <div class="detail-main-column">
+        <section class="panel"><div class="panel-heading"><div><div class="section-kicker">ИСТОРИЯ СПИСАНИЙ</div><h2>Платежи</h2></div><a class="text-link" href="{% url 'payment_create' subscription.pk %}">Добавить платёж ↗</a></div>
+            {% if payments %}<div class="table-responsive"><table class="table app-table align-middle"><thead><tr><th>Дата</th><th>Статус</th><th>Комментарий</th><th class="text-end">Сумма</th></tr></thead><tbody>{% for payment in payments %}<tr><td>{{ payment.paid_at|date:'d.m.Y' }}</td><td><span class="status-pill status-{{ payment.status }}">{{ payment.get_status_display }}</span></td><td>{{ payment.note|default:'—' }}</td><td class="text-end"><strong>{{ payment.amount|floatformat:2 }} {{ payment.currency }}</strong>{% if payment.normalized_amount %}<small class="cell-muted d-block">≈ {{ payment.normalized_amount|floatformat:2 }} {{ payment.normalized_currency }} · курс на {{ payment.exchange_rate_date|date:'d.m.Y' }}</small>{% endif %}</td></tr>{% endfor %}</tbody></table></div>{% else %}<div class="empty-state compact-empty"><span>↗</span><h3>Платежей пока нет</h3><p>Добавь запись, когда произойдёт списание.</p></div>{% endif %}
+        </section>
+        <section class="panel"><div class="panel-heading"><div><div class="section-kicker">ИЗМЕНЕНИЕ ТАРИФА</div><h2>История стоимости</h2></div></div>
+            {% if price_changes %}<div class="change-list">{% for change in price_changes %}<div class="change-item"><div><strong>{{ change.changed_at|date:'d.m.Y' }}</strong><small>Изменение цены</small></div><div class="change-prices"><del>{{ change.old_amount }} {{ change.old_currency }}</del><strong>{{ change.new_amount }} {{ change.new_currency }}</strong></div></div>{% endfor %}</div>{% else %}<div class="empty-state compact-empty"><span>↗</span><h3>История пуста</h3><p>Изменения цены будут фиксироваться автоматически при редактировании подписки.</p></div>{% endif %}
+        </section>
+        {% if subscription.notes %}<section class="panel notes-panel"><div class="section-kicker">ЗАМЕТКИ</div><p>{{ subscription.notes|linebreaksbr }}</p></section>{% endif %}
+    </div>
+    <aside class="detail-side-column">
+        <section class="panel side-form-panel"><div class="section-kicker">БЫСТРОЕ ДЕЙСТВИЕ</div><h2>Записать платёж</h2><p class="panel-description">После успешной оплаты следующая дата списания сдвинется автоматически.</p>
+            <form method="post" action="{% url 'payment_create' subscription.pk %}" novalidate>{% csrf_token %}
+                {% for field in payment_form %}<div class="field-block"><label for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}{% for error in field.errors %}<div class="field-error">{{ error }}</div>{% endfor %}</div>{% endfor %}
+                <button class="btn btn-primary w-100" type="submit">Сохранить платёж</button>
+            </form>
+        </section>
+        <section class="panel side-form-panel"><div class="section-kicker">НЕ ПРОПУСТИ ОПЛАТУ</div><h2>Напоминания</h2>
+            {% for reminder in reminders %}<div class="reminder-rule"><span>{% if reminder.is_enabled %}●{% else %}○{% endif %} За {{ reminder.days_before }} дн.</span><form method="post" action="{% url 'reminder_delete' subscription.pk reminder.pk %}">{% csrf_token %}<button type="submit" class="icon-button" aria-label="Удалить напоминание">×</button></form></div>{% empty %}<p class="panel-description">Для этой подписки пока нет правил напоминаний.</p>{% endfor %}
+            <form method="post" action="{% url 'reminder_create' subscription.pk %}" class="reminder-form">{% csrf_token %}
+                <div class="field-block"><label for="id_days_before">Напомнить за (дней)</label>{{ reminder_form.days_before }}</div>
+                <div class="checkbox-line">{{ reminder_form.is_enabled }}<span>Напоминание активно</span></div>
+                <button class="btn btn-secondary w-100" type="submit">Добавить напоминание</button>
+            </form>
+        </section>
+    </aside>
+</div>
+{% endblock %}

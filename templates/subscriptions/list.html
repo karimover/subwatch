@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block title %}Мои подписки — SubWatch{% endblock %}
+{% block content %}
+<div class="page-heading heading-with-action"><div><div class="section-kicker">ТВОИ СЕРВИСЫ</div><h1>Мои подписки</h1><p>Управляй регулярными платежами и следи за датами списаний.</p></div><a class="btn btn-primary" href="{% url 'subscription_create' %}">＋ Добавить подписку</a></div>
+<section class="panel list-panel">
+    <form method="get" class="filter-bar">
+        <div class="search-field"><span>⌕</span>{{ filter_form.q }}</div>
+        {{ filter_form.status }}
+        {{ filter_form.category }}
+        <button class="btn btn-secondary" type="submit">Фильтровать</button>
+        {% if request.GET %}<a class="clear-filter" href="{% url 'subscription_list' %}">Сбросить</a>{% endif %}
+        {% if filter_form.errors %}<div class="field-error">Проверь параметры фильтра.</div>{% endif %}
+    </form>
+    {% if subscriptions %}<div class="table-responsive"><table class="table app-table subscription-table align-middle"><thead><tr><th>Подписка</th><th>Категория</th><th>Стоимость</th><th>Следующее списание</th><th>Статус</th><th></th></tr></thead><tbody>
+        {% for subscription in subscriptions %}
+        <tr>
+            <td><a class="subscription-cell" href="{% url 'subscription_detail' subscription.pk %}"><span class="service-avatar" style="--category-color: {{ subscription.category.color }}">{{ subscription.name|first|upper }}</span><span><strong>{{ subscription.name }}</strong><small>{{ subscription.provider|default:'Личная подписка' }}</small></span></a></td>
+            <td><span class="category-tag"><i style="--category-color: {{ subscription.category.color }}"></i>{{ subscription.category.name }}</span></td>
+            <td><strong>{{ subscription.amount|floatformat:2 }} {{ subscription.currency }}</strong><small class="cell-muted">{{ subscription.get_billing_cycle_display }}</small></td>
+            <td>{{ subscription.next_payment_date|date:'d.m.Y' }}{% if subscription.days_until_payment >= 0 and subscription.days_until_payment <= 7 %}<small class="due-hint">{% if subscription.days_until_payment == 0 %}Сегодня{% elif subscription.days_until_payment == 1 %}Завтра{% else %}Через {{ subscription.days_until_payment }} дн.{% endif %}</small>{% endif %}</td>
+            <td><span class="status-pill status-{{ subscription.status }}">{{ subscription.get_status_display }}</span></td>
+            <td class="text-end"><a class="row-more" href="{% url 'subscription_detail' subscription.pk %}" aria-label="Открыть подписку">→</a></td>
+        </tr>
+        {% endfor %}
+    </tbody></table></div>{% else %}<div class="empty-state"><span>◌</span><h3>Подписок не найдено</h3><p>{% if request.GET %}Попробуй изменить фильтры.{% else %}Добавь первый сервис, чтобы начать контролировать расходы.{% endif %}</p><a class="btn btn-primary" href="{% url 'subscription_create' %}">Добавить подписку</a></div>{% endif %}
+</section>
+{% endblock %}
