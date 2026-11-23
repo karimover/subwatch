@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from django.conf import settings
 from django.db import migrations, models
 import django.core.validators
@@ -50,7 +52,7 @@ class Migration(migrations.Migration):
                 ("id", models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
                 ("name", models.CharField(max_length=100, verbose_name="Название подписки")),
                 ("provider", models.CharField(blank=True, max_length=100, verbose_name="Провайдер")),
-                ("amount", models.DecimalField(decimal_places=2, max_digits=12, validators=[django.core.validators.MinValueValidator(0.01)], verbose_name="Стоимость")),
+                ("amount", models.DecimalField(decimal_places=2, max_digits=12, validators=[django.core.validators.MinValueValidator(Decimal("0.01"))], verbose_name="Стоимость")),
                 ("currency", models.CharField(choices=CURRENCIES, default="EUR", max_length=3, verbose_name="Валюта")),
                 ("billing_cycle", models.CharField(choices=[("weekly", "Еженедельно"), ("monthly", "Ежемесячно"), ("quarterly", "Раз в квартал"), ("yearly", "Ежегодно")], default="monthly", max_length=12, verbose_name="Период оплаты")),
                 ("next_payment_date", models.DateField(verbose_name="Следующее списание")),
@@ -71,7 +73,7 @@ class Migration(migrations.Migration):
             name="Payment",
             fields=[
                 ("id", models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
-                ("amount", models.DecimalField(decimal_places=2, max_digits=12, validators=[django.core.validators.MinValueValidator(0.01)], verbose_name="Сумма списания")),
+                ("amount", models.DecimalField(decimal_places=2, max_digits=12, validators=[django.core.validators.MinValueValidator(Decimal("0.01"))], verbose_name="Сумма списания")),
                 ("currency", models.CharField(choices=CURRENCIES, max_length=3, verbose_name="Валюта")),
                 ("paid_at", models.DateField(default=django.utils.timezone.localdate, verbose_name="Дата платежа")),
                 ("status", models.CharField(choices=[("paid", "Оплачен"), ("failed", "Не прошёл")], default="paid", max_length=10, verbose_name="Статус")),
