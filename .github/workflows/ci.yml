@@ -1,0 +1,32 @@
+name: Django checks
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.12", "3.13"]
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+      - name: Install dependencies
+        run: pip install -r requirements-dev.txt
+      - name: Run Ruff
+        run: ruff check .
+      - name: Check Django configuration
+        run: python manage.py check
+      - name: Check migration state
+        run: python manage.py makemigrations --check --dry-run
+      - name: Run tests
+        run: python manage.py test
