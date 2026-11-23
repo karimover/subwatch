@@ -7,7 +7,13 @@ from django.utils import timezone
 
 from core.models import UserPreference
 
-from .forms import ConfirmationForm, PaymentForm, ReminderForm, SubscriptionFilterForm, SubscriptionForm
+from .forms import (
+    ConfirmationForm,
+    PaymentForm,
+    ReminderForm,
+    SubscriptionFilterForm,
+    SubscriptionForm,
+)
 from .models import PriceChange, Reminder, Subscription
 from .services import create_payment
 

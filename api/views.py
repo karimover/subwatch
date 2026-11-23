@@ -1,6 +1,5 @@
 from django.conf import settings
 from django.db import transaction
-
 from rest_framework import filters, viewsets
 from rest_framework.permissions import IsAuthenticated
 

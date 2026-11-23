@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 
 from core.models import UserPreference
+
 from .services import build_payment_analytics
 
 

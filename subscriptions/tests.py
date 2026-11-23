@@ -8,7 +8,12 @@ from django.utils import timezone
 
 from subscriptions.forms import PaymentForm, ReminderForm, SubscriptionFilterForm, SubscriptionForm
 from subscriptions.models import Reminder, Subscription, SubscriptionCategory
-from subscriptions.services import advance_billing_date, convert_to_base, create_payment, get_exchange_rates
+from subscriptions.services import (
+    advance_billing_date,
+    convert_to_base,
+    create_payment,
+    get_exchange_rates,
+)
 
 
 class BillingCalculationTests(TestCase):

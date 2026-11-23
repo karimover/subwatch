@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.test import TestCase
 
 from subscriptions.models import Payment, Subscription, SubscriptionCategory
+
 from .services import build_payment_analytics
 
 

@@ -8,7 +8,14 @@ from django.core.management.base import BaseCommand, CommandError
 from django.utils import timezone
 
 from core.models import UserPreference
-from subscriptions.models import ExchangeRate, Payment, PriceChange, Reminder, Subscription, SubscriptionCategory
+from subscriptions.models import (
+    ExchangeRate,
+    Payment,
+    PriceChange,
+    Reminder,
+    Subscription,
+    SubscriptionCategory,
+)
 from subscriptions.services import convert_to_base, get_exchange_rates
 
 
