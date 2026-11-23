@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block title %}Аналитика — SubWatch{% endblock %}
+{% block content %}
+<div class="page-heading"><div class="section-kicker">ФИНАНСОВЫЙ ОБЗОР</div><h1>Аналитика расходов</h1><p>Фактические платежи, сохранённые в {{ analytics.currency }} при их регистрации.</p></div>
+<div class="stats-grid analytics-stats">
+    <article class="stat-card stat-card-highlight"><div class="stat-label">Всего оплачено</div><div class="stat-value">{{ analytics.total_spent|floatformat:2 }} <small>{{ analytics.currency }}</small></div><div class="stat-note">за всю сохранённую историю</div></article>
+    <article class="stat-card"><div class="stat-label">Количество платежей</div><div class="stat-value">{{ analytics.payment_count }}</div><div class="stat-note">успешные операции с курсом</div></article>
+    <article class="stat-card"><div class="stat-label">Средний платёж</div><div class="stat-value">{{ analytics.average_payment|floatformat:2 }} <small>{{ analytics.currency }}</small></div><div class="stat-note">среднее по истории платежей</div></article>
+</div>
+{% if analytics.payment_count %}
+<div class="content-grid analytics-grid">
+    <section class="panel chart-panel"><div class="panel-heading"><div><div class="section-kicker">ДИНАМИКА</div><h2>Расходы по месяцам</h2></div><span class="chart-period">6 месяцев</span></div><div class="chart-wrap"><canvas id="monthlyChart" aria-label="Расходы по месяцам" role="img"></canvas></div></section>
+    <section class="panel chart-panel"><div class="panel-heading"><div><div class="section-kicker">СТРУКТУРА</div><h2>По категориям</h2></div></div><div class="chart-wrap chart-doughnut-wrap"><canvas id="categoryChart" aria-label="Расходы по категориям" role="img"></canvas></div></section>
+</div>
+<section class="panel top-services-panel"><div class="panel-heading"><div><div class="section-kicker">РАСХОДЫ НА СЕРВИСЫ</div><h2>Самые затратные подписки</h2></div></div><div class="top-service-list">{% for row in analytics.top_services %}<div class="top-service-row"><span>{{ forloop.counter|stringformat:'02d' }}</span><strong>{{ row.name }}</strong><b>{{ row.total|floatformat:2 }} {{ analytics.currency }}</b></div>{% endfor %}</div></section>
+{{ analytics.monthly_labels|json_script:'monthly-labels' }}
+{{ analytics.monthly_values|json_script:'monthly-values' }}
+{{ analytics.category_labels|json_script:'category-labels' }}
+{{ analytics.category_values|json_script:'category-values' }}
+{% else %}
+<div class="panel empty-state analytics-empty"><span>▥</span><h3>Для аналитики пока недостаточно данных</h3><p>Добавь подписки и записывай фактические платежи. После этого здесь появятся графики расходов.</p><a class="btn btn-primary" href="{% url 'subscription_list' %}">Перейти к подпискам</a></div>
+{% endif %}
+{% endblock %}
+{% block extra_js %}{% if analytics.payment_count %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+<script>
+(() => {
+    const labels = JSON.parse(document.getElementById('monthly-labels').textContent);
+    const monthly = JSON.parse(document.getElementById('monthly-values').textContent);
+    const categoryLabels = JSON.parse(document.getElementById('category-labels').textContent);
+    const categoryValues = JSON.parse(document.getElementById('category-values').textContent);
+    const textColor = '#9ba1b9';
+    const gridColor = 'rgba(255,255,255,.07)';
+    const currency = '{{ analytics.currency|escapejs }}';
+    new Chart(document.getElementById('monthlyChart'), {
+        type: 'bar',
+        data: { labels, datasets: [{ label: `Расходы, ${currency}`, data: monthly, borderRadius: 7, backgroundColor: 'rgba(139,124,255,.72)', hoverBackgroundColor: '#a69aff', maxBarThickness: 38 }] },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: (ctx) => `${ctx.parsed.y.toFixed(2)} ${currency}` } } }, scales: { x: { grid: { display: false }, ticks: { color: textColor } }, y: { beginAtZero: true, grid: { color: gridColor }, ticks: { color: textColor } } } }
+    });
+    new Chart(document.getElementById('categoryChart'), {
+        type: 'doughnut',
+        data: { labels: categoryLabels, datasets: [{ data: categoryValues, backgroundColor: ['#8b7cff','#54c8a5','#f1b86a','#6da8ff','#e77eab','#8d99ae','#b5a0ff'], borderWidth: 0, hoverOffset: 5 }] },
+        options: { responsive: true, maintainAspectRatio: false, cutout: '70%', plugins: { legend: { position: 'bottom', labels: { color: textColor, padding: 18, usePointStyle: true, pointStyle: 'circle' } }, tooltip: { callbacks: { label: (ctx) => `${ctx.label}: ${ctx.parsed.toFixed(2)} ${currency}` } } } }
+    });
+})();
+</script>
+{% endif %}{% endblock %}
