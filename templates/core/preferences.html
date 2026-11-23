@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block title %}Настройки — SubWatch{% endblock %}
+{% block content %}
+<div class="page-heading"><div><div class="section-kicker">ПЕРСОНАЛИЗАЦИЯ</div><h1>Настройки</h1><p>Выбери валюту и срок напоминаний для своего аккаунта.</p></div></div>
+<div class="form-card settings-card"><form method="post" novalidate>{% csrf_token %}
+    {% for field in form %}<div class="field-block"><label for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}{% if field.help_text %}<div class="field-help">{{ field.help_text }}</div>{% endif %}{% for error in field.errors %}<div class="field-error">{{ error }}</div>{% endfor %}</div>{% endfor %}
+    <div class="form-note">Валюта применяется к сводным суммам и аналитике. Курсы — справочные, источник: Frankfurter.</div>
+    <button class="btn btn-primary" type="submit">Сохранить настройки</button>
+</form></div>
+{% endblock %}

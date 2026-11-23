@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}Вход — SubWatch{% endblock %}
+{% block content %}
+<div class="auth-layout">
+    <div class="auth-aside"><div class="eyebrow"><span class="eyebrow-dot"></span> С возвращением</div><h1>Держи свои подписки <span>в поле зрения.</span></h1><p>Один обзор вместо десятка неожиданных списаний.</p></div>
+    <div class="form-card auth-card">
+        <div class="form-card-head"><span class="section-kicker">Аккаунт</span><h2>Войти в SubWatch</h2><p>Введите логин и пароль.</p></div>
+        {% if form.errors %}<div class="form-error-summary">Не удалось войти. Проверьте логин и пароль.</div>{% endif %}
+        <form method="post" novalidate>{% csrf_token %}
+            <div class="field-block"><label for="id_username">Логин</label><input class="form-control" type="text" name="username" id="id_username" autocomplete="username" required autofocus></div>
+            <div class="field-block"><label for="id_password">Пароль</label><input class="form-control" type="password" name="password" id="id_password" autocomplete="current-password" required></div>
+            <input type="hidden" name="next" value="{{ next }}">
+            <button class="btn btn-primary w-100 btn-lg mt-2" type="submit">Войти</button>
+        </form>
+        <p class="auth-switch">Нет аккаунта? <a href="{% url 'signup' %}">Зарегистрироваться</a></p>
+    </div>
+</div>
+{% endblock %}

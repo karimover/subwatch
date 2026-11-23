@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block title %}SubWatch — держи подписки под контролем{% endblock %}
+{% block content %}
+<section class="hero-section">
+    <div class="hero-copy">
+        <div class="eyebrow"><span class="eyebrow-dot"></span> Порядок в регулярных расходах</div>
+        <h1>Подписки любят списывать деньги. <span>Мы любим предупреждать.</span></h1>
+        <p class="hero-lead">Собери все регулярные платежи в одном месте, узнай их реальную стоимость за месяц и не пропускай даты списаний.</p>
+        <div class="hero-actions">
+            <a href="{% url 'signup' %}" class="btn btn-primary btn-lg">Начать бесплатно <span aria-hidden="true">↗</span></a>
+            <a href="{% url 'login' %}" class="btn btn-ghost btn-lg">У меня уже есть аккаунт</a>
+        </div>
+        <div class="hero-proof"><span class="proof-check">✓</span> Без привязки банковской карты и доступа к банковским счетам</div>
+    </div>
+    <div class="hero-visual">
+        <div class="visual-glow"></div>
+        <div class="preview-card preview-main">
+            <div class="preview-top"><span>Месячные расходы</span><span class="preview-period">↗ обзор</span></div>
+            <div class="preview-total">€ 48,96</div>
+            <div class="preview-subtitle">эквивалент активных подписок</div>
+            <div class="preview-bars"><i style="height:42%"></i><i style="height:70%"></i><i style="height:52%"></i><i style="height:88%"></i><i style="height:63%"></i><i style="height:100%"></i><i style="height:76%"></i><i style="height:91%"></i><i style="height:58%"></i><i style="height:80%"></i><i style="height:66%"></i><i style="height:95%"></i></div>
+            <div class="preview-chart-labels"><span>ЯНВ</span><span>ФЕВ</span><span>МАР</span><span>АПР</span><span>МАЙ</span><span>ИЮН</span></div>
+        </div>
+        <div class="preview-card preview-floating preview-reminder"><span class="reminder-icon">◷</span><div><strong>Завтра списание</strong><span>Spotify Premium · €10,99</span></div><span class="reminder-dot"></span></div>
+        <div class="preview-card preview-floating preview-service"><span class="service-icon service-netflix">N</span><div><strong>Netflix</strong><span>Следующий платёж · 28 ноя</span></div><strong class="service-price">€13,99</strong></div>
+    </div>
+</section>
+<section class="feature-grid">
+    <article class="feature-card"><span class="feature-icon">↗</span><h3>Реальная стоимость</h3><p>Сравнивай недельные, месячные и годовые подписки в одной валюте.</p></article>
+    <article class="feature-card"><span class="feature-icon">◷</span><h3>Ближайшие списания</h3><p>Заранее видь, какие платежи приближаются и сколько они составят.</p></article>
+    <article class="feature-card"><span class="feature-icon">▥</span><h3>История и аналитика</h3><p>Следи за изменением цен и понимай, на какие сервисы уходит больше всего.</p></article>
+</section>
+{% endblock %}

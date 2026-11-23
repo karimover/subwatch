@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}Регистрация — SubWatch{% endblock %}
+{% block content %}
+<div class="auth-layout">
+    <div class="auth-aside"><div class="eyebrow"><span class="eyebrow-dot"></span> Начни с простого</div><h1>Все регулярные платежи. <span>В одном месте.</span></h1><p>Добавь подписки, посмотри на общую сумму и верни контроль над расходами.</p></div>
+    <div class="form-card auth-card">
+        <div class="form-card-head"><span class="section-kicker">Новый аккаунт</span><h2>Создать аккаунт</h2><p>Это займёт меньше минуты.</p></div>
+        <form method="post" novalidate>{% csrf_token %}
+            {% for field in form %}
+                <div class="field-block"><label for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}{% if field.help_text %}<div class="field-help">{{ field.help_text|safe }}</div>{% endif %}{% for error in field.errors %}<div class="field-error">{{ error }}</div>{% endfor %}</div>
+            {% endfor %}
+            {% for error in form.non_field_errors %}<div class="field-error mb-3">{{ error }}</div>{% endfor %}
+            <button class="btn btn-primary w-100 btn-lg mt-2" type="submit">Создать аккаунт</button>
+        </form>
+        <p class="auth-switch">Уже зарегистрированы? <a href="{% url 'login' %}">Войти</a></p>
+    </div>
+</div>
+{% endblock %}
