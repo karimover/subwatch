@@ -18,7 +18,6 @@ from subscriptions.models import (
 )
 from subscriptions.services import convert_to_base, get_exchange_rates
 
-
 DEMO_SUBSCRIPTIONS = [
     ("Netflix", "video", "Netflix", "13.99", "EUR", "monthly", 4),
     ("Spotify Premium", "music", "Spotify", "10.99", "EUR", "monthly", 8),
