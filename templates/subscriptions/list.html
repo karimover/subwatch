@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block title %}Мои подписки — SubWatch{% endblock %}
 {% block content %}
-<div class="page-heading heading-with-action"><div><div class="section-kicker">ТВОИ СЕРВИСЫ</div><h1>Мои подписки</h1><p>Управляй регулярными платежами и следи за датами списаний.</p></div><a class="btn btn-primary" href="{% url 'subscription_create' %}">＋ Добавить подписку</a></div>
+<div class="page-heading heading-with-action"><div><div class="section-kicker">УПРАВЛЕНИЕ ПОДПИСКАМИ</div><h1>Подписки</h1><p>Все сервисы, стоимость и даты следующих списаний.</p></div><a class="btn btn-primary" href="{% url 'subscription_create' %}">＋ Добавить подписку</a></div>
 <section class="panel list-panel">
     <form method="get" class="filter-bar">
         <div class="search-field"><span>⌕</span>{{ filter_form.q }}</div>
