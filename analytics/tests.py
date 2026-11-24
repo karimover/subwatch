@@ -12,7 +12,7 @@ from .services import build_payment_analytics
 class PaymentAnalyticsTests(TestCase):
     def setUp(self):
         self.user = User.objects.create_user(username="analyst", password="safe-test-password")
-        category = SubscriptionCategory.objects.create(name="Музыка", slug="music")
+        category = SubscriptionCategory.objects.get(slug="music")
         self.subscription = Subscription.objects.create(
             user=self.user,
             category=category,

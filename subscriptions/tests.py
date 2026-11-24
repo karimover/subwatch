@@ -117,7 +117,7 @@ class PaymentRecordingTests(TestCase):
 
 class SubscriptionFormTests(TestCase):
     def setUp(self):
-        self.category = SubscriptionCategory.objects.create(name="Видео", slug="video")
+        self.category = SubscriptionCategory.objects.get(slug="video")
 
     def valid_form_data(self):
         return {
@@ -176,7 +176,7 @@ class SubscriptionOwnershipTests(TestCase):
     def setUp(self):
         self.owner = User.objects.create_user(username="owner", password="safe-test-password")
         self.other = User.objects.create_user(username="other", password="safe-test-password")
-        category = SubscriptionCategory.objects.create(name="Music", slug="music")
+        category = SubscriptionCategory.objects.get(slug="music")
         self.subscription = Subscription.objects.create(
             user=self.owner,
             category=category,

@@ -14,7 +14,7 @@ class SubscriptionApiTests(TestCase):
     def setUp(self):
         self.owner = User.objects.create_user(username="api-owner", password="safe-test-password")
         self.other = User.objects.create_user(username="api-other", password="safe-test-password")
-        self.category = SubscriptionCategory.objects.create(name="Музыка", slug="api-music")
+        self.category = SubscriptionCategory.objects.get(slug="music")
         self.own_subscription = Subscription.objects.create(
             user=self.owner,
             category=self.category,
