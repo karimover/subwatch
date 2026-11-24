@@ -2,12 +2,12 @@
 {% block title %}Обзор — SubWatch{% endblock %}
 {% block content %}
 <div class="dashboard-topline">
-    <span class="section-kicker">SUBWATCH / ЛИЧНЫЙ КАБИНЕТ</span>
-    <span class="dashboard-date">ФИНАНСОВЫЙ ОБЗОР · {{ today|date:"d.m.Y" }}</span>
+    <span class="section-kicker">ОБЗОР АККАУНТА</span>
+    <span class="dashboard-date">Обновлено {{ today|date:"d.m.Y" }}</span>
 </div>
 <div class="page-heading heading-with-action dashboard-heading">
-    <div><div class="section-kicker">ВАШ ФИНАНСОВЫЙ ЦЕНТР</div><h1>Привет, {{ user.first_name|default:user.username }} <span class="wave">✦</span></h1><p>Все регулярные платежи и предстоящие списания — в одном месте.</p></div>
-    <a class="btn btn-primary" href="{% url 'subscription_create' %}">＋ Добавить подписку</a>
+    <div><h1>Обзор</h1><p>Сводка по регулярным платежам и ближайшим списаниям.</p></div>
+    <a class="btn btn-primary" href="{% url 'subscription_create' %}">＋ Новая подписка</a>
 </div>
 <div class="stats-grid">
     <article class="stat-card stat-card-highlight"><div class="stat-label">Месячные расходы</div><div class="stat-value">{{ summary.monthly_total|floatformat:2 }} <small>{{ summary.base_currency }}</small></div><div class="stat-note">эквивалент активных подписок</div><span class="stat-orb">↗</span></article>
