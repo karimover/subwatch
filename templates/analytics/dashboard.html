@@ -29,17 +29,17 @@
     const monthly = JSON.parse(document.getElementById('monthly-values').textContent);
     const categoryLabels = JSON.parse(document.getElementById('category-labels').textContent);
     const categoryValues = JSON.parse(document.getElementById('category-values').textContent);
-    const textColor = 'rgba(243,239,232,.55)';
-    const gridColor = 'rgba(243,239,232,.09)';
+    const textColor = '#7d8792';
+    const gridColor = 'rgba(31,40,51,.09)';
     const currency = '{{ analytics.currency|escapejs }}';
     new Chart(document.getElementById('monthlyChart'), {
         type: 'bar',
-        data: { labels, datasets: [{ label: `Расходы, ${currency}`, data: monthly, borderRadius: 7, backgroundColor: 'rgba(229,29,53,.72)', hoverBackgroundColor: '#f13a50', maxBarThickness: 38 }] },
+        data: { labels, datasets: [{ label: `Расходы, ${currency}`, data: monthly, borderRadius: 7, backgroundColor: 'rgba(183,40,60,.72)', hoverBackgroundColor: '#b7283c', maxBarThickness: 38 }] },
         options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: (ctx) => `${ctx.parsed.y.toFixed(2)} ${currency}` } } }, scales: { x: { grid: { display: false }, ticks: { color: textColor } }, y: { beginAtZero: true, grid: { color: gridColor }, ticks: { color: textColor } } } }
     });
     new Chart(document.getElementById('categoryChart'), {
         type: 'doughnut',
-        data: { labels: categoryLabels, datasets: [{ data: categoryValues, backgroundColor: ['#e51d35','#b89a70','#8eb7a1','#8c7375','#a7a09a','#8d535d','#5d5753'], borderWidth: 0, hoverOffset: 5 }] },
+        data: { labels: categoryLabels, datasets: [{ data: categoryValues, backgroundColor: ['#b7283c','#7f9d8d','#d0ae72','#8d98a5','#a47f83','#aeb7bf','#697684'], borderWidth: 0, hoverOffset: 5 }] },
         options: { responsive: true, maintainAspectRatio: false, cutout: '70%', plugins: { legend: { position: 'bottom', labels: { color: textColor, padding: 18, usePointStyle: true, pointStyle: 'circle' } }, tooltip: { callbacks: { label: (ctx) => `${ctx.label}: ${ctx.parsed.toFixed(2)} ${currency}` } } } }
     });
 })();
