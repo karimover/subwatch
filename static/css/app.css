@@ -212,6 +212,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 }
 .topbar-left, .topbar-right { display: flex; align-items: center; gap: 16px; }
 .topbar-context { color: #424a55; font-size: 12px; font-weight: 700; }
+.workspace-label { color: #98a0aa; font-size: 10px; }
 .privacy-indicator { display: inline-flex; align-items: center; gap: 7px; color: #8a929d; font-size: 10px; }
 .privacy-indicator i { width: 6px; height: 6px; border-radius: 50%; background: #5b9b7b; }
 .topbar-quick-add {
@@ -373,7 +374,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
     height: 8px;
     flex: 0 0 8px;
     border-radius: 50%;
-    background: var(--category-color, #a9afb8);
+    background: color-mix(in srgb, var(--category-color, #a9afb8) 58%, #fff);
 }
 .upcoming-name { display: flex; flex: 1; flex-direction: column; min-width: 0; gap: 2px; }
 .upcoming-name strong { color: #39414b; font-size: 11px; font-weight: 700; }
@@ -384,7 +385,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .category-row-title { display: flex; align-items: center; gap: 8px; color: #68727e; font-size: 10px; }
 .category-row-title strong { margin-left: auto; color: #424b56; font-size: 10px; }
 .category-progress { height: 5px; margin-top: 7px; overflow: hidden; border-radius: 20px; background: #f0f2f4; }
-.category-progress span { display: block; height: 100%; border-radius: inherit; background: var(--category-color, #b8bec6); }
+.category-progress span { display: block; height: 100%; border-radius: inherit; background: color-mix(in srgb, var(--category-color, #b8bec6) 68%, #fff); }
 .category-totals { display: flex; flex-direction: column; gap: 8px; margin-top: 17px; padding-top: 13px; border-top: 1px solid #eceef1; }
 .category-totals > div { display: flex; justify-content: space-between; gap: 10px; color: #858e99; font-size: 9px; }
 .category-totals strong { color: #4d5662; font-size: 9px; font-weight: 700; }
@@ -600,7 +601,7 @@ input[type="date"]::-webkit-calendar-picker-indicator { opacity: .65; }
     flex: 0 0 31px;
     border: 1px solid color-mix(in srgb,var(--category-color,#aab1ba) 24%, #e7e9ed);
     border-radius: 8px;
-    background: color-mix(in srgb,var(--category-color,#aab1ba) 10%, #fff);
+    background: color-mix(in srgb,var(--category-color,#aab1ba) 8%, #fff);
     color: color-mix(in srgb,var(--category-color,#727b86) 75%, #252c35);
     font-size: 12px;
     font-weight: 800;
