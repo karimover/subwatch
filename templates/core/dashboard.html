@@ -1,8 +1,12 @@
 {% extends 'base.html' %}
 {% block title %}Обзор — SubWatch{% endblock %}
 {% block content %}
-<div class="page-heading heading-with-action">
-    <div><div class="section-kicker">ЛИЧНЫЙ ОБЗОР</div><h1>Привет, {{ user.first_name|default:user.username }} <span class="wave">✦</span></h1><p>Вот что происходит с твоими регулярными платежами.</p></div>
+<div class="dashboard-topline">
+    <span class="section-kicker">SUBWATCH / ЛИЧНЫЙ КАБИНЕТ</span>
+    <span class="dashboard-date">ФИНАНСОВЫЙ ОБЗОР · {{ today|date:"d.m.Y" }}</span>
+</div>
+<div class="page-heading heading-with-action dashboard-heading">
+    <div><div class="section-kicker">ВАШ ФИНАНСОВЫЙ ЦЕНТР</div><h1>Привет, {{ user.first_name|default:user.username }} <span class="wave">✦</span></h1><p>Все регулярные платежи и предстоящие списания — в одном месте.</p></div>
     <a class="btn btn-primary" href="{% url 'subscription_create' %}">＋ Добавить подписку</a>
 </div>
 <div class="stats-grid">
