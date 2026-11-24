@@ -10,15 +10,15 @@
     <a class="btn btn-primary" href="{% url 'subscription_create' %}">＋ Новая подписка</a>
 </div>
 <div class="stats-grid">
-    <article class="stat-card stat-card-highlight"><div class="stat-label">Месячные расходы</div><div class="stat-value">{{ summary.monthly_total|floatformat:2 }} <small>{{ summary.base_currency }}</small></div><div class="stat-note">эквивалент активных подписок</div><span class="stat-orb">↗</span></article>
+    <article class="stat-card stat-card-highlight"><div class="stat-label">Месячные расходы</div><div class="stat-value">{{ summary.monthly_total|floatformat:2 }} <small>{{ summary.base_currency }}</small></div><div class="stat-note">эквивалент активных подписок</div></article>
     <article class="stat-card"><div class="stat-label">Прогноз на год</div><div class="stat-value">{{ summary.annual_total|floatformat:2 }} <small>{{ summary.base_currency }}</small></div><div class="stat-note">если текущие условия сохранятся</div></article>
     <article class="stat-card"><div class="stat-label">Активные подписки</div><div class="stat-value">{{ active_count }}</div><div class="stat-note">ещё {{ paused_count }} на паузе</div></article>
-    <article class="stat-card"><div class="stat-label">Списания за 7 дней</div><div class="stat-value">{{ due_soon_count }}</div><div class="stat-note">не пропусти ближайшие даты</div></article>
+    <article class="stat-card"><div class="stat-label">Платежи за 7 дней</div><div class="stat-value">{{ due_soon_count }}</div><div class="stat-note">предстоящие платежи</div></article>
 </div>
 {% if summary.unconverted_currencies %}<div class="notice-banner"><span>ⓘ</span><div>Не удалось получить курс для валют: {{ summary.unconverted_currencies|join:', ' }}. Эти суммы не включены в итоговый эквивалент. <a href="https://frankfurter.dev/" target="_blank" rel="noopener">Источник курсов</a>.</div></div>{% endif %}
 <div class="content-grid dashboard-grid">
     <section class="panel upcoming-panel">
-        <div class="panel-heading"><div><div class="section-kicker">КАЛЕНДАРЬ ПЛАТЕЖЕЙ</div><h2>Ближайшие списания</h2></div><a class="text-link" href="{% url 'subscription_list' %}">Все подписки ↗</a></div>
+        <div class="panel-heading"><div><div class="section-kicker">ПЛАТЕЖИ · 30 ДНЕЙ</div><h2>Предстоящие платежи</h2></div><a class="text-link" href="{% url 'subscription_list' %}">Все подписки</a></div>
         {% if upcoming %}<div class="upcoming-list">
             {% for subscription in upcoming %}
                 <a class="upcoming-item" href="{% url 'subscription_detail' subscription.pk %}">
@@ -28,20 +28,20 @@
                     <strong class="upcoming-amount">{{ subscription.amount|floatformat:2 }} {{ subscription.currency }}</strong>
                 </a>
             {% endfor %}
-        </div>{% else %}<div class="empty-state compact-empty"><span>◷</span><h3>Пока тихо</h3><p>В ближайшие 30 дней нет запланированных списаний.</p></div>{% endif %}
+        </div>{% else %}<div class="empty-state compact-empty"><span>◷</span><h3>Нет предстоящих платежей</h3><p>В следующие 30 дней списаний не запланировано.</p></div>{% endif %}
     </section>
     <section class="panel category-panel">
         <div class="panel-heading"><div><div class="section-kicker">СТРУКТУРА</div><h2>Подписки по категориям</h2></div></div>
-        {% if category_counts %}<div class="category-list">{% for row in category_counts %}<div class="category-row"><div class="category-row-title"><span class="category-dot" style="--category-color: {{ row.category__color }}"></span><span>{{ row.category__name }}</span><strong>{{ row.subscription_count }}</strong></div><div class="category-progress"><span style="width: {% widthratio row.subscription_count active_count 100 %}%; --category-color: {{ row.category__color }}"></span></div></div>{% endfor %}</div>{% else %}<div class="empty-state compact-empty"><span>▥</span><h3>Пока нет категорий</h3><p>Добавь первую подписку, чтобы увидеть структуру.</p></div>{% endif %}
+        {% if category_counts %}<div class="category-list">{% for row in category_counts %}<div class="category-row"><div class="category-row-title"><span class="category-dot" style="--category-color: {{ row.category__color }}"></span><span>{{ row.category__name }}</span><strong>{{ row.subscription_count }}</strong></div><div class="category-progress"><span style="width: {% widthratio row.subscription_count active_count 100 %}%; --category-color: {{ row.category__color }}"></span></div></div>{% endfor %}</div>{% else %}<div class="empty-state compact-empty"><span>▥</span><h3>Нет категорий</h3><p>Категории появятся после добавления подписок.</p></div>{% endif %}
         {% if summary.category_totals %}<div class="category-totals">{% for name, amount in summary.category_totals %}<div><span>{{ name }}</span><strong>{{ amount|floatformat:2 }} {{ summary.base_currency }}</strong></div>{% endfor %}</div>{% endif %}
     </section>
 </div>
 <div class="content-grid lower-grid">
-    <section class="panel"><div class="panel-heading"><div><div class="section-kicker">ИСТОРИЯ</div><h2>Последние платежи</h2></div><a class="text-link" href="{% url 'analytics_dashboard' %}">Аналитика ↗</a></div>
-        {% if latest_payments %}<div class="table-responsive"><table class="table app-table align-middle"><thead><tr><th>Сервис</th><th>Дата</th><th>Статус</th><th class="text-end">Сумма</th></tr></thead><tbody>{% for payment in latest_payments %}<tr><td><a class="table-main-link" href="{% url 'subscription_detail' payment.subscription.pk %}">{{ payment.subscription.name }}</a></td><td>{{ payment.paid_at|date:'d.m.Y' }}</td><td><span class="status-pill status-{{ payment.status }}">{{ payment.get_status_display }}</span></td><td class="text-end fw-semibold">{{ payment.amount|floatformat:2 }} {{ payment.currency }}</td></tr>{% endfor %}</tbody></table></div>{% else %}<div class="empty-state compact-empty"><span>↗</span><h3>Платежей пока нет</h3><p>Отмечай списания в карточках подписок.</p></div>{% endif %}
+    <section class="panel"><div class="panel-heading"><div><div class="section-kicker">ПОСЛЕДНИЕ ОПЕРАЦИИ</div><h2>Последние платежи</h2></div><a class="text-link" href="{% url 'analytics_dashboard' %}">Открыть аналитику</a></div>
+        {% if latest_payments %}<div class="table-responsive"><table class="table app-table align-middle"><thead><tr><th>Сервис</th><th>Дата</th><th>Статус</th><th class="text-end">Сумма</th></tr></thead><tbody>{% for payment in latest_payments %}<tr><td><a class="table-main-link" href="{% url 'subscription_detail' payment.subscription.pk %}">{{ payment.subscription.name }}</a></td><td>{{ payment.paid_at|date:'d.m.Y' }}</td><td><span class="status-pill status-{{ payment.status }}">{{ payment.get_status_display }}</span></td><td class="text-end fw-semibold">{{ payment.amount|floatformat:2 }} {{ payment.currency }}</td></tr>{% endfor %}</tbody></table></div>{% else %}<div class="empty-state compact-empty"><span>↗</span><h3>Нет платежей</h3><p>Добавьте запись об оплате в карточке подписки.</p></div>{% endif %}
     </section>
-    <section class="panel price-change-panel"><div class="panel-heading"><div><div class="section-kicker">ИЗМЕНЕНИЯ ЦЕН</div><h2>Что подорожало</h2></div></div>
-        {% if recent_price_changes %}<div class="change-list">{% for change in recent_price_changes %}<div class="change-item"><div><strong>{{ change.subscription.name }}</strong><small>{{ change.changed_at|date:'d.m.Y' }}</small></div><div class="change-prices"><del>{{ change.old_amount }} {{ change.old_currency }}</del><strong>{{ change.new_amount }} {{ change.new_currency }}</strong></div></div>{% endfor %}</div>{% else %}<div class="empty-state compact-empty"><span>↗</span><h3>Без изменений</h3><p>История повышения или снижения цен появится здесь.</p></div>{% endif %}
+    <section class="panel price-change-panel"><div class="panel-heading"><div><div class="section-kicker">ИСТОРИЯ СТОИМОСТИ</div><h2>Изменения стоимости</h2></div></div>
+        {% if recent_price_changes %}<div class="change-list">{% for change in recent_price_changes %}<div class="change-item"><div><strong>{{ change.subscription.name }}</strong><small>{{ change.changed_at|date:'d.m.Y' }}</small></div><div class="change-prices"><del>{{ change.old_amount }} {{ change.old_currency }}</del><strong>{{ change.new_amount }} {{ change.new_currency }}</strong></div></div>{% endfor %}</div>{% else %}<div class="empty-state compact-empty"><span>↗</span><h3>Нет изменений стоимости</h3><p>Изменения будут отображаться после обновления стоимости подписки.</p></div>{% endif %}
     </section>
 </div>
 {% endblock %}
