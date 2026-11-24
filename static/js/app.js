@@ -1,4 +1,32 @@
 (() => {
+
+    const sidebarToggle = document.querySelector("[data-sidebar-toggle]");
+    const sidebarBackdrop = document.querySelector("[data-sidebar-close]");
+
+    const closeSidebar = () => {
+        document.body.classList.remove("sidebar-open");
+        if (sidebarToggle) sidebarToggle.setAttribute("aria-expanded", "false");
+    };
+
+    if (sidebarToggle) {
+        sidebarToggle.addEventListener("click", () => {
+            const isOpen = document.body.classList.toggle("sidebar-open");
+            sidebarToggle.setAttribute("aria-expanded", String(isOpen));
+        });
+    }
+
+    if (sidebarBackdrop) {
+        sidebarBackdrop.addEventListener("click", closeSidebar);
+    }
+
+    document.querySelectorAll(".side-nav-link").forEach((link) => {
+        link.addEventListener("click", closeSidebar);
+    });
+
+    document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") closeSidebar();
+    });
+
     document.querySelectorAll("[data-confirm]").forEach((element) => {
         element.addEventListener("click", (event) => {
             const message = element.dataset.confirm || "Подтвердить действие?";
